@@ -12,7 +12,10 @@ class CDL():
 SKIP = [
     "Progettazione delle aree verdi e del paesaggio - Interateneo",
     "Scienze viticole ed enologiche - Interateneo",
-    "Artificial Intelligence"
+    "Artificial Intelligence",
+    "Interpretariato e traduzione in lingua dei segni italiana (LIS) e lingua dei segni italiana tattile (LIST)",
+    "Artificial intelligence for science and technology",
+    "Global Environment and Development",
 ]
 
 
@@ -38,15 +41,11 @@ def parser():
         files = soup.find_all("span", class_ = "file-link")
 
         sm = files[0].find("a")["href"]
-        rules = files[1].find("a")["href"]
+        rules = files[1].find("a")["href"] if len(files) > 1 else None
+        aus = files[3].find("a")["href"] if len(files) > 1 else None
         
-        if len(files) == 3:
-            aus = None
-        else:
-            aus = files[3].find("a")["href"]
-        
-        div = soup.find_all("div", class_ = "paragraph paragraph--type--bp-action")[1:]
-        links = [d.find("a")["href"].strip() for d in div]
+        div = soup.find("div", class_ = "views-field views-field-bando-al-servizio")
+        links = [link["href"].strip() for link in div.findChildren("a", recursive=True)]
 
         imm = dict()
         if len(links) == 1:
